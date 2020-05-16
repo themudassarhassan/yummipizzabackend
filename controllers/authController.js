@@ -48,7 +48,12 @@ exports.signup = catchAsync(async (req, res) => {
 exports.protect = catchAsync(async (req, res, next) => {
   let token = null;
   // check if token is present in header or not
-  if (req.cookies && req.cookies.jwt) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies && req.cookies.jwt) {
     token = req.cookies.jwt;
   }
   if (!token) {
@@ -60,7 +65,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // verify if the user still exists or not
 
-  const user = await User.findAll({
+  let user = await User.findAll({
     where: {
       id: decoded.id,
     },
@@ -71,9 +76,9 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError("The user belonging to this token no longer exist.", 401)
     );
   }
-  console.log("CURR USER::", user);
+
   // grant access to the protected route.
-  req.user = user;
+  req.user = user[0].dataValues;
 
   next();
 });

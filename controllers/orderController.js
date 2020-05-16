@@ -2,10 +2,10 @@ const { Order, OrderItem } = require("../models");
 const { catchAsync } = require("../utils/catchAsync");
 
 exports.create = catchAsync(async (req, res) => {
-  const { price, userId, items } = req.body;
+  const { price, items } = req.body;
   let order = await Order.create({
     price,
-    UserId: userId,
+    UserId: req.user.id,
   });
   order = order.toJSON();
   for (const item of items) {
@@ -19,6 +19,11 @@ exports.create = catchAsync(async (req, res) => {
 });
 
 exports.getAll = catchAsync(async (req, res) => {
-  const orders = await Order.findAll({ include: OrderItem });
+  const orders = await Order.findAll({
+    include: OrderItem,
+    where: {
+      UserId: req.user.id,
+    },
+  });
   res.status(200).json({ status: "success", orders });
 });
