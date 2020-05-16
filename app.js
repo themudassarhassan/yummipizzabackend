@@ -1,16 +1,16 @@
 const express = require("express");
-// const cors = require("cors");
+const cors = require("cors");
 const app = express();
 const authRoute = require("./routes/authRoute");
 const menuRoute = require("./routes/menuRoute");
 const orderRoute = require("./routes/orderRoute");
 const globalErrorHandler = require("./controllers/errorController");
 
-// const corsOption = {
-//   origin: "http://localhost:3000",
-// };
+const corsOption = {
+  origin: "https://myyummipizzaapp.herokuapp.com/",
+};
 
-// app.use(cors(corsOption));
+app.use(cors(corsOption));
 app.use(express.json());
 app.use(express.static("public"));
 
