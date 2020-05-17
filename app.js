@@ -7,7 +7,7 @@ const orderRoute = require("./routes/orderRoute");
 const globalErrorHandler = require("./controllers/errorController");
 
 const corsOption = {
-  origin: "http://localhost:5000",
+  origin: "https://myyummipizzaapp.herokuapp.com",
 };
 
 app.use(cors(corsOption));
